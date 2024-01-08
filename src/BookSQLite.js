@@ -9,13 +9,13 @@ const sqlite3 = require('sqlite3')
 const app = express()
 
 
-const db = new sql.Database('./Database/Book.sqlite')
+const db = new sqlite3.Database('./Database/Books.sqlite3')
 
 
 app.use(express.json())
 
-
-db.run(`CREAT TABLE IF NOT EXITS books(
+                    // ไม่สร้างซ่ำ Table ชื่อ books
+db.run(`CREATE TABLE IF NOT EXISTS books( 
     id INTEAGER PRIMARY KEY,
     title TEXT,
     author TEXT
@@ -39,7 +39,7 @@ app.get('/books/:id',(req,res)=>{
             res.status(500).send(err)
         }else{
             if(!row){
-                res.status(404).send('Book nort fond')
+                res.status(404).send('Book not fond')
             }else{
                 res.json(row)
             }
@@ -84,8 +84,10 @@ app.delete('/books/:id',(req,res)=>{
 })
 
 const port = process.env.PORT || 3000
-app.listen(port, () => console.log(`listening on port ${port}...`))
 
+app.listen(port, () => {
+    console.log(`listening on port at http://localhost:${port}  ...`)
+})
 
 
 
