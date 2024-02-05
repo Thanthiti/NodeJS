@@ -3,7 +3,6 @@
 
 
 
-
 const express = require('express')
 const Sequelize = require('sequelize')
 const app = express()
@@ -12,7 +11,7 @@ const app = express()
 app.use(express.json())
 
 
-const sequelize = new sequelize('database','usename','password',{
+const sequelize = new Sequelize('database','usename','password',{
     host:"localhost",
     dialect:"sqlite",
     storage:"./Database/SQBooks.sqlite"
@@ -21,27 +20,25 @@ const sequelize = new sequelize('database','usename','password',{
 
 const Book = sequelize.define("book",{
     id :{
-        type: Sequlize.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement:true,
-        primarykey: true
+        primaryKey: true
     },
     title :{
-        type: Sequlize.STRING,
-        allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false // have to
     },
     author :{
-        type: Sequlize.STRING,
-        allowNull: false
-        
+        type: Sequelize.STRING,
+        allowNull: false // have to        
     },  
 })
 
-
-
+sequelize.sync()
 
 app.get('/books',(req,res)=>{
-    Book.findAll().then(book =>{
-        res.json(book)
+    Book.findAll().then(books =>{
+        res.json(books)
     }).catch(err=>{
         res.status(500).send(err)
     })
@@ -51,7 +48,7 @@ app.get('/books',(req,res)=>{
 app.get('/books/:id',(req,res)=>{
     Book.findByPk(req.params.id).then(book =>{
         if(!book) {
-            res.status(400).send('Book not found')
+            res.status(404).send('Book not found')
         }else{
             res.json(book)
         }
@@ -61,13 +58,16 @@ app.get('/books/:id',(req,res)=>{
 })
 
 
+
 app.post('/books',(req,res)=>{
     Book.create(req.body).then(book =>{
-        res.send(books)
+        res.send(book)
+        
     }).catch(err=>{
         res.status(500).send(err)
     })
 })
+
 
 app.put('/books/:id',(req,res)=>{
     Book.findByPk(req.params.id).then(book =>{
