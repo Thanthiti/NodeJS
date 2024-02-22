@@ -4,7 +4,8 @@ const app = express()
 
 
 app.use(express.json())
-console.log("Start\n\n\n\n")
+
+
 
 const dburl = "postgres://webadmin:CVAsbp63189@node57327-nodepem.proen.app.ruk-com.cloud:11344/Books"
 const sequelize = new Sequelize(dburl)
