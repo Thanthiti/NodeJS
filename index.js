@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 
 
 mongoose.connect(
-    "mongodb://admin:TNVaep61591@node57326-nodepem.proen.app.ruk-com.cloud/books", 
+    "mongodb://admin:TNVaep61591@node57326-nodepem.proen.app.ruk-com.cloud:11900", 
     {
         useNewUrlParser: true,
         useUnifiedtopology: true,   
@@ -25,22 +25,24 @@ const app = express()
 app.use(bodyParser.json())
 
 
-app.post('/books', async(req, res) => {
+app.post("/books", async (req, res) => {
+    console.log("Dothis")
     try {
-
-        const lastBook = await Book.findOne().Sort({ id: -1 })
+        console.log("Dothis1")
+        const lastBook = await Book.findOne().sort({ id: -1 })
         const nextId = lastBook ? lastBook.id + 1 : 1
-
-
+        
+        
         const book = new Book({
             id: nextId,
             ...req.body,
         })
+        console.log("Dothis2")
 
         await book.save()
         res.send(book)
     } catch (err) {
-        res.status(500).send('Error')
+        res.status(500).send('Eror1')
     }
 })
 
@@ -50,7 +52,7 @@ app.get('/books', async(req, res) => {
         const books = await Book.find()
         res.send(books)
     } catch (err) {
-        res.status(500).send('Error')
+        res.status(500).send('Error2')
     }
 })
 
@@ -60,7 +62,7 @@ app.get('/books/:id', async(req, res) => {
         const book = await Book.findOne({ id: req.params.id })
         res.send(books)
     } catch (err) {
-        res.status(500).send('Error')
+        res.status(500).send('Error3')
     }
 })
 
@@ -72,7 +74,7 @@ app.put('/books/:id', async(req, res) => { // show create desktop
         })
         res.send(books)
     } catch (err) {
-        res.status(500).send('Error')
+        res.status(500).send('Error4')
     }
 })
 
@@ -82,7 +84,7 @@ app.delete('/books/:id', async(req, res) => {
         const book = await Book.findOneAndDelete({ id: req.params.id })
         res.send(books)
     } catch (err) {
-        res.status(500).send('Error')
+        res.status(500).send('Error5')
     }
 })
 
